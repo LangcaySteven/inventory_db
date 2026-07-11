@@ -29,17 +29,19 @@
         }
 
         .card{
-            background:#D1D5DB !important;
-            border:none !important;
-            border-radius:20px;
-            box-shadow:0 12px 30px rgba(0,0,0,.25);
-            transition:.3s;
-        }
+    background: rgba(47, 123, 236, 0.95) !important;
+    border:1px solid rgba(115, 210, 77, 0.3) !important;
+    border-radius:20px;
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    box-shadow:0 10px 30px rgba(15,23,42,.12);
+    transition:all .3s ease;
+}
 
-        .card:hover{
-            transform:translateY(-4px);
-            box-shadow:0 18px 40px rgba(0,0,0,.35);
-        }
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 20px 40px rgba(15,23,42,.2);
+}
 
         .table{
             border-radius:15px;

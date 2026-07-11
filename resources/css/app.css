@@ -57,7 +57,7 @@
 /* Body */
 
 .inventory-table tbody td{
-    padding:24px 18px;
+    padding:12px 11px;
     vertical-align:middle;
 }
 
@@ -179,9 +179,12 @@
     padding:15px;
 }
 
-.inventory-table td{
-    padding:15px;
+.inventory-table th:nth-child(2),
+.inventory-table td:nth-child(2){
+    width:250px;
 }
+}
+
 
 .category-badge{
     padding:7px 14px;
@@ -193,4 +196,3 @@
     height:36px;
 }
 
-}
