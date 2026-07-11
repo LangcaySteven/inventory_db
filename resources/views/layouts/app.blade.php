@@ -8,11 +8,20 @@
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Laravel CSS -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <style>
         body{
-            background: linear-gradient(135deg, #020617, #0F172A, #1E3A8A);
+            background: linear-gradient(135deg,#020617,#0F172A,#1E3A8A);
             min-height:100vh;
-            font-family: 'Segoe UI', sans-serif;
+            font-family:'Segoe UI',sans-serif;
         }
 
         .container{
@@ -20,17 +29,18 @@
         }
 
         .card{
-   background:#D1D5DB !important;
-    border:none !important;
-    border-radius:20px;
-    box-shadow:0 12px 30px rgba(0,0,0,.25);
-    transition:.3s;
-}
+            background:#D1D5DB !important;
+            border:none !important;
+            border-radius:20px;
+            box-shadow:0 12px 30px rgba(0,0,0,.25);
+            transition:.3s;
+        }
 
-.card:hover{
-    transform:translateY(-4px);
-    box-shadow:0 18px 40px rgba(0,0,0,.35);
-}
+        .card:hover{
+            transform:translateY(-4px);
+            box-shadow:0 18px 40px rgba(0,0,0,.35);
+        }
+
         .table{
             border-radius:15px;
             overflow:hidden;
@@ -59,6 +69,7 @@
         @yield('content')
     </div>
 
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

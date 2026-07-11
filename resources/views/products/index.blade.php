@@ -1,20 +1,29 @@
 @extends('layouts.app')
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded-4 shadow-sm bg-white">
-    <div>
-        <h2 class="fw-bold mb-1" style="color:#0F766E;">
-            📦 Inventory Dashboard
+
+<div class="d-flex justify-content-between align-items-center mb-4 p-4 rounded-4 shadow"
+    style="background:linear-gradient(135deg,#2563EB,#7C3AED);">
+
+    <div class="text-white">
+        <h2 class="fw-bold mb-1">
+            <i class="bi bi-speedometer2 me-2"></i>Inventory Dashboard
         </h2>
-        <small class="text-muted">Manage your inventory efficiently.</small>
+
+        <small class="text-white-50">
+            Welcome back! Manage your products with ease.
+        </small>
     </div>
 
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button class="btn text-white px-4"
-            style="background:#EF4444;border:none;border-radius:10px;">
+
+        <button class="btn btn-light fw-bold px-4 rounded-pill">
+            <i class="bi bi-box-arrow-right"></i>
             Logout
         </button>
+
     </form>
+
 </div>
 @if(session('success'))
 <div class="alert alert-success alert-dismissible fade show" role="alert">

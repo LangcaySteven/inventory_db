@@ -1,133 +1,185 @@
-<div class="table-responsive shadow rounded-4 border">
-    <table class="table table-hover align-middle mb-0">
-        <thead style="background:#4B5563; color:white;">
-            <tr class="text-center">
-                <th class="py-3">#</th>
-                <th class="py-3">📦 Product Name</th>
-                <th class="py-3">📂 Category</th>
-                <th class="py-3">📊 Stock</th>
-                <th class="py-3">⚠️ Min Stock</th>
-                <th class="py-3">💰 Price</th>
-                <th class="py-3">📌 Status</th>
-                <th class="py-3">⚙️ Actions</th>
-            </tr>
-        </thead>
+<div class="table-container">
+    <div class="table-responsive">
+        <table class="table inventory-table align-middle mb-0">
 
-        <tbody>
+            <thead class="inventory-header">
+    <tr class="text-center">
+        <th><i class="bi bi-hash me-1"></i> ID</th>
+        <th><i class="bi bi-box-seam me-1"></i> Product</th>
+        <th><i class="bi bi-tag me-1"></i> Category</th>
+        <th><i class="bi bi-boxes me-1"></i> Stock</th>
+        <th><i class="bi bi-exclamation-triangle me-1"></i> Min Stock</th>
+        <th><i class="bi bi-cash-stack me-1"></i> Price</th>
+        <th><i class="bi bi-check-circle me-1"></i> Status</th>
+        <th><i class="bi bi-gear me-1"></i> Actions</th>
+    </tr>
+</thead>
 
-            @forelse($products as $product)
+            <tbody>
 
-            <tr class="text-center">
+                @forelse($products as $product)
 
-                <td class="fw-bold text-secondary">
-                    {{ ($products->currentPage() - 1) * $products->perPage() + $loop->iteration }}
-                </td>
+                <tr>
 
-                <td class="fw-semibold text-dark">
-                    {{ $product->product_name }}
-                </td>
+                   <td>
+    <div class="id-circle">
+        {{ ($products->currentPage() - 1) * $products->perPage() + $loop->iteration }}
+    </div>
+</td>
 
-                <td>
-                    <span class="badge rounded-pill px-3 py-2"
-                        style="background:#14B8A6;">
-                        {{ $product->category }}
-                    </span>
-                </td>
+                    <td>
+    <div class="d-flex align-items-center">
 
-                <td class="fw-semibold">
-                    {{ $product->stock }}
-                </td>
+        <div class="product-icon me-3">
 
-                <td>
-                    {{ $product->minimum_stock }}
-                </td>
+            @switch(strtolower($product->product_name))
 
-                <td class="fw-bold text-success">
-                    ₱{{ number_format($product->price,2) }}
-                </td>
+                @case('printer ink')
+                    <i class="bi bi-printer-fill"></i>
+                    @break
 
-                <td>
+                @case('monitor')
+                    <i class="bi bi-display-fill"></i>
+                    @break
 
-                    @if($product->stock <= $product->minimum_stock)
+                @case('keyboard')
+                    <i class="bi bi-keyboard-fill"></i>
+                    @break
 
-                        <span class="badge rounded-pill px-3 py-2 bg-danger">
-                            Low Stock
+                @case('mouse')
+                    <i class="bi bi-mouse-fill"></i>
+                    @break
+
+                @case('seagate 1tb external hard drive')
+                    <i class="bi bi-device-hdd-fill"></i>
+                    @break
+
+                @case('hp usb keyboard')
+                    <i class="bi bi-keyboard-fill"></i>
+                    @break
+
+                @case('logitech wireless mouse')
+                    <i class="bi bi-mouse-fill"></i>
+                    @break
+
+                @default
+                    <i class="bi bi-box-seam-fill"></i>
+
+            @endswitch
+
+        </div>
+
+        <div class="product-name fw-semibold">
+            {{ $product->product_name }}
+        </div>
+
+    </div>
+</td>
+
+                    <td class="text-center">
+                        <span class="badge category-badge">
+                            {{ $product->category }}
                         </span>
+                    </td>
 
-                    @else
+                    <td class="text-center fw-bold">
+                        {{ $product->stock }}
+                    </td>
 
-                        <span class="badge rounded-pill px-3 py-2 bg-success">
-                            In Stock
-                        </span>
+                    <td class="text-center">
+                        {{ $product->minimum_stock }}
+                    </td>
 
-                    @endif
+                    <td class="text-center">
+    <span class="price">
+        ₱{{ number_format($product->price,2) }}
+    </span>
+</td>
 
-                </td>
+                    <td class="text-center">
 
-                <td>
+                        @if($product->stock <= $product->minimum_stock)
 
-                    <div class="d-flex justify-content-center gap-2 flex-wrap">
+                            <span class="badge bg-danger px-3 py-2 rounded-pill">
+                                <i class="fas fa-arrow-trend-down me-1"></i>
+                                Low Stock
+                            </span>
 
-                        <a href="{{ route('products.edit', $product->id) }}"
-                            class="btn btn-sm text-white"
-                            style="background:#3B82F6;border-radius:10px;">
-                            ✏️
-                        </a>
+                        @else
 
-                        <button
-                            class="btn btn-sm text-white"
-                            style="background:#F59E0B;border-radius:10px;"
-                            data-bs-toggle="modal"
-                            data-bs-target="#adjustStockModal"
-                            data-id="{{ $product->id }}"
-                            data-name="{{ $product->product_name }}"
-                            data-stock="{{ $product->stock }}">
-                            📈
-                        </button>
+                            <span class="badge bg-success px-3 py-2 rounded-pill">
+                                <i class="fas fa-arrow-trend-up me-1"></i>
+                                In Stock
+                            </span>
 
-                        <a href="{{ route('products.logs', $product->id) }}"
-                            class="btn btn-sm text-white"
-                            style="background:#8B5CF6;border-radius:10px;">
-                            📜
-                        </a>
+                        @endif
 
-                        <form action="{{ route('products.destroy', $product->id) }}"
-                            method="POST"
-                            onsubmit="return confirm('Are you sure you want to delete this product?');">
+                    </td>
 
-                            @csrf
-                            @method('DELETE')
+                    <td>
 
+                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+
+                            {{-- Edit --}}
+                            <a href="{{ route('products.edit', $product->id) }}"
+                               class="btn btn-primary btn-sm rounded-circle action-btn">
+                                <i class="fas fa-pen"></i>
+                            </a>
+
+                            {{-- Adjust Stock --}}
                             <button
-                                class="btn btn-sm text-white"
-                                style="background:#EF4444;border-radius:10px;">
-                                🗑️
+                                class="btn btn-warning btn-sm rounded-circle action-btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#adjustStockModal"
+                                data-id="{{ $product->id }}"
+                                data-name="{{ $product->product_name }}"
+                                data-stock="{{ $product->stock }}">
+                                <i class="fas fa-chart-bar"></i>
                             </button>
 
-                        </form>
+                            {{-- Logs --}}
+                            <a href="{{ route('products.logs', $product->id) }}"
+                               class="btn btn-purple btn-sm rounded-circle action-btn">
+                                <i class="fas fa-file-alt"></i>
+                            </a>
 
-                    </div>
+                            {{-- Delete --}}
+                            <form action="{{ route('products.destroy', $product->id) }}"
+                                  method="POST"
+                                  onsubmit="return confirm('Delete this product?')">
 
-                </td>
+                                @csrf
+                                @method('DELETE')
 
-            </tr>
+                                <button type="submit"
+                                        class="btn btn-danger btn-sm rounded-circle action-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
 
-            @empty
+                            </form>
 
-            <tr>
+                        </div>
 
-                <td colspan="8" class="text-center py-5 text-muted">
-                    <h5>No Products Found</h5>
-                    <small>Add your first inventory product.</small>
-                </td>
+                    </td>
 
-            </tr>
+                </tr>
 
-            @endforelse
+                @empty
 
-        </tbody>
+                <tr>
+                    <td colspan="8" class="text-center py-5 text-muted">
+                        <i class="fas fa-box-open fa-3x mb-3"></i>
+                        <h5>No Products Found</h5>
+                        <p>Add your first inventory product.</p>
+                    </td>
+                </tr>
 
-    </table>
+                @endforelse
+
+            </tbody>
+
+        </table>
+    </div>
 </div>
 
 <div class="mt-4 d-flex justify-content-center">
