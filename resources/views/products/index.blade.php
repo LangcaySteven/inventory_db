@@ -1,11 +1,18 @@
 @extends('layouts.app')
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="text-primary fw-bold">📦 Inventory Dashboard</h2>
+<div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded-4 shadow-sm bg-white">
+    <div>
+        <h2 class="fw-bold mb-1" style="color:#0F766E;">
+            📦 Inventory Dashboard
+        </h2>
+        <small class="text-muted">Manage your inventory efficiently.</small>
+    </div>
+
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit" class="btn btn-outline-danger fw-semibold">
-            ⏻ Log out
+        <button class="btn text-white px-4"
+            style="background:#EF4444;border:none;border-radius:10px;">
+            Logout
         </button>
     </form>
 </div>
@@ -39,45 +46,102 @@
         </div>
     </div>
 </div>
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <a href="{{ route('products.create') }}" class="btn btn-primary fw-semibold">
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+    <a href="{{ route('products.create') }}"
+        class="btn text-white fw-semibold px-4 py-2 shadow-sm"
+        style="background:#14B8A6; border-radius:12px;">
         ➕ Add New Product
     </a>
-    <a href="{{ route('products.summary.pdf') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" class="btn btn-outline-secondary fw-semibold">
-        📥 Download PDF Summary
+
+    <a href="{{ route('products.summary.pdf') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}"
+        class="btn fw-semibold px-4 py-2 shadow-sm"
+        style="background:#FFFFFF; color:#14B8A6; border:2px solid #14B8A6; border-radius:12px;">
+        📄 Export PDF
     </a>
-</div>
-@if($lowStocks->count() > 0)
-<div class="alert alert-danger shadow-sm mb-4">
-    <h5 class="alert-heading fw-bold">⚠️ Critical Low Stock Warnings</h5>
-    <hr class="my-2">
-    <ul class="mb-0 pl-3">
-        @foreach($lowStocks as $item)
-            <li><strong>{{ $item->product_name }}</strong> is down to only <span class="badge bg-danger">{{ $item->stock }}</span> items (Minimum Threshold: {{ $item->minimum_stock }}).</li>
-        @endforeach
-    </ul>
+
 </div>
 
+@if($lowStocks->count() > 0)
+
+<div class="alert border-0 shadow rounded-4 p-4 mb-4"
+     style="background:#FEF2F2;">
+
+    <div class="d-flex align-items-center mb-3">
+        <span style="font-size:28px;">⚠️</span>
+        <div class="ms-3">
+            <h5 class="fw-bold mb-0 text-danger">
+                Low Stock Alert
+            </h5>
+            <small class="text-muted">
+                The following products need immediate restocking.
+            </small>
+        </div>
+    </div>
+
+    <hr>
+
+    <ul class="list-group list-group-flush">
+
+        @foreach($lowStocks as $item)
+
+        <li class="list-group-item bg-transparent border-0 px-0 d-flex justify-content-between align-items-center">
+
+            <div>
+                <strong>{{ $item->product_name }}</strong><br>
+                <small class="text-muted">
+                    Minimum Stock: {{ $item->minimum_stock }}
+                </small>
+            </div>
+
+            <span class="badge rounded-pill bg-danger px-3 py-2">
+                {{ $item->stock }} left
+            </span>
+
+        </li>
+
+        @endforeach
+
+    </ul>
+
+</div>
 @endif
 <div class="card shadow-sm border-0 p-3">
     <h5 class="card-title mb-3 fw-bold text-secondary">Current Inventory Ledger</h5>
     <div class="mb-3">
         <form id="filters-form" class="row g-2">
             <div class="col-md-6">
-                <input type="search" name="q" id="search-box" value="{{ request('q') }}" class="form-control" placeholder="Search products or categories...">
+               <input type="search"
+    name="q"
+    id="search-box"
+    value="{{ request('q') }}"
+    class="form-control shadow-sm rounded-4"
+    placeholder="🔍 Search products or categories..."
+    style="height:50px;border:2px solid #14B8A6;">
             </div>
+           <div class="col-md-3">
+    <select name="category"
+        id="category-filter"
+        class="form-select shadow-sm rounded-4"
+        style="height:50px;border:2px solid #14B8A6;">
+
+        <option value="">📂 All Categories</option>
+
+        @if(isset($categories))
+            @foreach($categories as $cat)
+                <option value="{{ $cat }}" @selected(request('category')==$cat)>
+                    {{ $cat }}
+                </option>
+            @endforeach
+        @endif
+
+    </select>
+</div>
             <div class="col-md-3">
-                <select name="category" id="category-filter" class="form-select">
-                    <option value="">All Categories</option>
-                    @if(isset($categories))
-                        @foreach($categories as $cat)
-                            <option value="{{ $cat }}" @selected(request('category')==$cat)>{{ $cat }}</option>
-                        @endforeach
-                    @endif
-                </select>
-            </div>
-            <div class="col-md-3">
-                <select name="sort" id="sort-filter" class="form-select">
+    <select name="sort"
+        id="sort-filter"
+        class="form-select shadow-sm rounded-4"
+        style="height:50px;border:2px solid #14B8A6;">
                     <option value="">Sort (default)</option>
                     <option value="stock_asc" @selected(request('sort')=='stock_asc')>Stock ↑</option>
                     <option value="stock_desc" @selected(request('sort')=='stock_desc')>Stock ↓</option>
